@@ -7,8 +7,8 @@ import { useBooks } from '../contexts/BookContext';
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
-  const { isAuthenticated, user, logout } = useAuth();
-  const { searchQuery, setSearchQuery, cartItemCount } = useBooks();
+  const { isAuthenticated, user, logout: authLogout } = useAuth();
+  const { searchQuery, setSearchQuery, cartItemCount, logout: bookLogout } = useBooks();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -20,7 +20,8 @@ const Header = () => {
   };
 
   const handleLogout = () => {
-    logout();
+    authLogout();
+    bookLogout(true); // Clear cart on manual logout
     setIsUserMenuOpen(false);
     navigate('/');
   };

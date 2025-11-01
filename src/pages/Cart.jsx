@@ -31,6 +31,8 @@ const Cart = () => {
   const [orderDetails, setOrderDetails] = useState({
     orderId: "",
     estimatedDelivery: "",
+    totalAmount: 0,
+    itemCount: 0,
   });
   const [localError, setLocalError] = useState(null);
 
@@ -62,13 +64,18 @@ const Cart = () => {
   }, [contextError]);
 
   const { total, subtotal, shipping, tax } = useMemo(() => {
-    const subtotal =
-      typeof cartTotal === "number" ? cartTotal : parseFloat(cartTotal) || 0;
-    const shipping = subtotal >= 25 ? 0 : 4.99;
-    const tax = subtotal * 0.08;
-    const total = subtotal + shipping + tax;
-    return { total, subtotal, shipping, tax };
-  }, [cart, cartTotal]);
+    // Calculate from cart items directly to ensure accuracy
+    const calculatedSubtotal = cart.reduce((sum, item) => {
+      const price = typeof item.price === 'number' ? item.price : parseFloat(item.price) || 0;
+      const quantity = item.quantity || 1;
+      return sum + (price * quantity);
+    }, 0);
+    
+    const shipping = calculatedSubtotal >= 25 ? 0 : 4.99;
+    const tax = calculatedSubtotal * 0.08;
+    const total = calculatedSubtotal + shipping + tax;
+    return { total, subtotal: calculatedSubtotal, shipping, tax };
+  }, [cart]);
 
   const handleQuantityChange = async (bookId, newQty) => {
     try {
@@ -98,13 +105,22 @@ const Cart = () => {
         return;
       }
 
+      // Save order details BEFORE clearing cart
+      const orderTotal = total;
+      const orderItemCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+
       const result = await checkout();
       if (result.success) {
         const {
           orderId = "BH-" + Date.now().toString().slice(-8),
           estimatedDelivery = new Date(Date.now() + 5 * 24 * 60 * 60 * 1000),
         } = result.data || {};
-        setOrderDetails({ orderId, estimatedDelivery });
+        setOrderDetails({ 
+          orderId, 
+          estimatedDelivery,
+          totalAmount: orderTotal,
+          itemCount: orderItemCount,
+        });
         setShowSuccessModal(true);
       } else {
         setLocalError(result.error || "Checkout failed. Please try again.");
@@ -472,13 +488,13 @@ const Cart = () => {
                   <div className="flex justify-between items-center mb-2">
                     <span className="text-gray-600">Items:</span>
                     <span className="font-medium">
-                      {cart.reduce((sum, item) => sum + item.quantity, 0)}
+                      {orderDetails.itemCount}
                     </span>
                   </div>
                   <div className="flex justify-between items-center mb-2">
                     <span className="text-gray-600">Total:</span>
                     <span className="font-bold text-lg text-gray-900">
-                      ${total.toFixed(2)}
+                      ${orderDetails.totalAmount.toFixed(2)}
                     </span>
                   </div>
                 </div>

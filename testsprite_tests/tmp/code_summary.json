@@ -1,0 +1,140 @@
+{
+  "tech_stack": [
+    "TypeScript",
+    "JavaScript",
+    "React 18",
+    "React Router DOM v6",
+    "Vite",
+    "TailwindCSS",
+    "Styled Components",
+    "Axios",
+    "EmailJS",
+    "Lodash",
+    "Lucide React"
+  ],
+  "features": [
+    {
+      "name": "Authentication System",
+      "description": "User authentication with login, registration, and JWT token management. Includes protected routes and session persistence via localStorage.",
+      "files": [
+        "src/contexts/AuthContext.jsx",
+        "src/pages/Login.jsx",
+        "src/pages/Register.jsx"
+      ]
+    },
+    {
+      "name": "Book Management Context",
+      "description": "Centralized state management for books, cart operations, and book CRUD operations using React Context API.",
+      "files": [
+        "src/contexts/BookContext.jsx"
+      ]
+    },
+    {
+      "name": "Home Page",
+      "description": "Landing page with featured books, hero section, and main call-to-action elements.",
+      "files": [
+        "src/pages/Home.jsx"
+      ]
+    },
+    {
+      "name": "Books Catalog",
+      "description": "Browse and search books with filtering, pagination, and category selection.",
+      "files": [
+        "src/pages/Books.jsx"
+      ]
+    },
+    {
+      "name": "Book Detail Page",
+      "description": "Detailed view of individual books with add-to-cart functionality, ratings, and full descriptions.",
+      "files": [
+        "src/pages/BookDetail.jsx"
+      ]
+    },
+    {
+      "name": "Shopping Cart",
+      "description": "Shopping cart functionality with item management, quantity updates, order summary, and checkout process.",
+      "files": [
+        "src/pages/Cart.jsx"
+      ]
+    },
+    {
+      "name": "User Dashboard",
+      "description": "Protected user dashboard showing user statistics, order history, and account management.",
+      "files": [
+        "src/pages/Dashboard.jsx"
+      ]
+    },
+    {
+      "name": "My Books Management",
+      "description": "User's book collection management for sellers - view, edit, and delete their listed books.",
+      "files": [
+        "src/pages/MyBooks.jsx"
+      ]
+    },
+    {
+      "name": "Add/Edit Book",
+      "description": "Form for adding new books or editing existing books with image upload, category selection, and validation.",
+      "files": [
+        "src/pages/AddEditBook.jsx"
+      ]
+    },
+    {
+      "name": "Navigation Header",
+      "description": "Responsive header with navigation menu, search functionality, cart badge, and user authentication status.",
+      "files": [
+        "src/components/Header.jsx"
+      ]
+    },
+    {
+      "name": "Footer Component",
+      "description": "Footer with site links, social media, and contact information.",
+      "files": [
+        "src/components/Footer.jsx"
+      ]
+    },
+    {
+      "name": "Book Card Component",
+      "description": "Reusable card component for displaying book information in grid/list views.",
+      "files": [
+        "src/components/BookCard.jsx"
+      ]
+    },
+    {
+      "name": "Loading Spinner",
+      "description": "Animated loader component for async operations and page transitions.",
+      "files": [
+        "src/components/Loader.jsx"
+      ]
+    },
+    {
+      "name": "Newsletter Subscription",
+      "description": "Email newsletter subscription form integrated with EmailJS service.",
+      "files": [
+        "src/components/NewsletterSubscription.jsx",
+        "src/utils/emailConfig.js"
+      ]
+    },
+    {
+      "name": "Lazy Loading Components",
+      "description": "Lazy-loaded components for optimized performance and code splitting.",
+      "files": [
+        "src/components/LazyBookCard.tsx",
+        "src/components/LazyNewsletterSubscription.tsx"
+      ]
+    },
+    {
+      "name": "Protected Routes",
+      "description": "Route guards that ensure only authenticated users can access certain pages like dashboard and book management.",
+      "files": [
+        "src/App.tsx"
+      ]
+    },
+    {
+      "name": "Google Books Service Integration",
+      "description": "Integration with Google Books API for additional book data.",
+      "files": [
+        "src/contexts/googleBooksService.js"
+      ]
+    }
+  ]
+}

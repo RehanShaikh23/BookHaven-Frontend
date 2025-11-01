@@ -1,0 +1,99 @@
+import asyncio
+from playwright import async_api
+from playwright.async_api import expect
+
+async def run_test():
+    pw = None
+    browser = None
+    context = None
+    
+    try:
+        # Start a Playwright session in asynchronous mode
+        pw = await async_api.async_playwright().start()
+        
+        # Launch a Chromium browser in headless mode with custom arguments
+        browser = await pw.chromium.launch(
+            headless=True,
+            args=[
+                "--window-size=1280,720",         # Set the browser window size
+                "--disable-dev-shm-usage",        # Avoid using /dev/shm which can cause issues in containers
+                "--ipc=host",                     # Use host-level IPC for better stability
+                "--single-process"                # Run the browser in a single process mode
+            ],
+        )
+        
+        # Create a new browser context (like an incognito window)
+        context = await browser.new_context()
+        context.set_default_timeout(5000)
+        
+        # Open a new page in the browser context
+        page = await context.new_page()
+        
+        # Navigate to your target URL and wait until the network request is committed
+        await page.goto("http://localhost:5173/", wait_until="commit", timeout=10000)
+        
+        # Wait for the main page to reach DOMContentLoaded state (optional for stability)
+        try:
+            await page.wait_for_load_state("domcontentloaded", timeout=3000)
+        except async_api.Error:
+            pass
+        
+        # Iterate through all iframes and wait for them to load as well
+        for frame in page.frames:
+            try:
+                await frame.wait_for_load_state("domcontentloaded", timeout=3000)
+            except async_api.Error:
+                pass
+        
+        # Interact with the page elements to simulate user flow
+        # -> Scroll down or extract content to find a book link to navigate to its detail page
+        await page.mouse.wheel(0, 300)
+        
+
+        # -> Try to reload the page to resolve loading issue or check for any clickable elements to navigate to a book detail page
+        await page.goto('http://localhost:5173/', timeout=10000)
+        await asyncio.sleep(3)
+        
+
+        # -> Scroll down the page to try to reveal any hidden book elements or navigation links
+        await page.mouse.wheel(0, 400)
+        
+
+        # -> Try to find any clickable elements or navigation links to a book detail page or try to reload or open a new tab to test a direct book detail page URL
+        await page.mouse.wheel(0, 400)
+        
+
+        # -> Try to open a new tab and navigate directly to a known book detail page URL to bypass the loading issue on the homepage
+        await page.goto('http://localhost:5173/book/1', timeout=10000)
+        await asyncio.sleep(3)
+        
+
+        # -> Scroll down the page to check if the book details and 'Add to Cart' button are further down or hidden
+        await page.mouse.wheel(0, 300)
+        
+
+        # -> Try to scroll further down or up to find the book details and 'Add to Cart' button or check for any hidden elements
+        await page.mouse.wheel(0, 400)
+        
+
+        # -> Scroll up to top and try to find any hidden or off-screen 'Add to Cart' button or book details
+        await page.mouse.wheel(0, -await page.evaluate('() => window.innerHeight'))
+        
+
+        # --> Assertions to verify final state
+        try:
+            await expect(page.locator('text=Book successfully added to cart!').first).to_be_visible(timeout=1000)
+        except AssertionError:
+            raise AssertionError("Test case failed: Unable to verify that the book was added to the shopping cart from the detail page as the confirmation message 'Book successfully added to cart!' was not found on the page.")
+        await asyncio.sleep(5)
+    
+    finally:
+        if context:
+            await context.close()
+        if browser:
+            await browser.close()
+        if pw:
+            await pw.stop()
+            
+asyncio.run(run_test())
+    

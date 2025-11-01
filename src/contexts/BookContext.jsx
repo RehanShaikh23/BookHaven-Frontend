@@ -220,7 +220,7 @@ const bookReducer = (state, action) => {
       return { ...state, user: action.payload };
     
     case 'LOGOUT':
-      return { ...state, user: null, cart: [] };
+      return { ...state, user: null };
     
     default:
       return state;
@@ -253,10 +253,30 @@ export const BookProvider = ({ children }) => {
     }
   }, [state.error]);
 
-  // Load cart from localStorage on mount
+  // Load cart from localStorage on mount and fetch from backend if authenticated
   useEffect(() => {
     const storedCart = getStoredData(CART_KEY);
-    if (storedCart && Array.isArray(storedCart)) {
+    const token = localStorage.getItem(TOKEN_KEY);
+    
+    if (token && isValidToken(token)) {
+      // If authenticated, fetch cart from backend
+      const fetchCartFromBackend = async () => {
+        try {
+          const response = await axios.get('/cart');
+          if (response.data && Array.isArray(response.data)) {
+            dispatch({ type: 'SET_CART', payload: response.data });
+          }
+        } catch (error) {
+          console.warn('Failed to fetch cart from backend, using local storage:', error);
+          // Fallback to local storage if backend fetch fails
+          if (storedCart && Array.isArray(storedCart)) {
+            dispatch({ type: 'SET_CART', payload: storedCart });
+          }
+        }
+      };
+      fetchCartFromBackend();
+    } else if (storedCart && Array.isArray(storedCart)) {
+      // Not authenticated, use local storage
       dispatch({ type: 'SET_CART', payload: storedCart });
     }
   }, []);
@@ -413,14 +433,14 @@ export const BookProvider = ({ children }) => {
   }, []);
 
   const removeFromCart = useCallback(async (bookId) => {
-  const result = await apiCall('delete', `/cart/${bookId}`, null, dispatch);
-  
-  if (result.success) {
-    dispatch({ type: 'REMOVE_FROM_CART', payload: bookId });
-  }
+    const result = await apiCall('delete', `/cart/${bookId}`, null, dispatch);
+    
+    if (result.success) {
+      dispatch({ type: 'REMOVE_FROM_CART', payload: bookId });
+    }
 
-  return result;
-}, [dispatch]);
+    return result;
+  }, []);
 
 
   const updateCartQuantity = useCallback(async (bookId, quantity) => {
@@ -459,9 +479,12 @@ export const BookProvider = ({ children }) => {
   }, []);
 
   // Utility methods
-  const logout = useCallback(() => {
+  const logout = useCallback((clearCart = false) => {
     localStorage.removeItem(TOKEN_KEY);
-    localStorage.removeItem(CART_KEY);
+    if (clearCart) {
+      localStorage.removeItem(CART_KEY);
+      dispatch({ type: 'CLEAR_CART' });
+    }
     dispatch({ type: 'LOGOUT' });
     dispatch({ type: 'CLEAR_ERROR' });
   }, []);

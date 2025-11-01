@@ -1,0 +1,18 @@
+{
+  "status": "init",
+  "scope": "codebase",
+  "type": "frontend",
+  "localEndpoint": "http://localhost:5173/",
+  "serverPort": 54963,
+  "apiKey": "sk-user-8oGGx-1qvFqftShYzIirhDyahp63IJAkf2HX-KpE7OGKMYLa7ZO5Ud0ppIQiuBe-XOSlTSdmppO5WQj3_tOg0c6jQ82R8CV6ylXswcCDQDY3njKpPxOQmwLYzL7NtuRHoMM",
+  "executionArgs": {
+    "projectName": "Frontend",
+    "projectPath": "c:\\MyProjects\\BookHaven-FullStack\\Frontend",
+    "testIds": [],
+    "additionalInstruction": "",
+    "envs": {
+      "API_KEY": "sk-user-8oGGx-1qvFqftShYzIirhDyahp63IJAkf2HX-KpE7OGKMYLa7ZO5Ud0ppIQiuBe-XOSlTSdmppO5WQj3_tOg0c6jQ82R8CV6ylXswcCDQDY3njKpPxOQmwLYzL7NtuRHoMM"
+    }
+  },
+  "proxy": "http://3957a71b-8a6c-404d-aa99-59f85e3f23e5:bn5tCer3TxJHCxNew9FDQcqvPjZAhgLZ@tun.testsprite.com:8080"
+}

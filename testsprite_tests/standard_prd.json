@@ -1,0 +1,193 @@
+{
+  "meta": {
+    "project": "BookHaven Online Bookstore",
+    "date": "2025-10-29",
+    "prepared_by": "Software Development Manager"
+  },
+  "product_overview": "BookHaven is a comprehensive online bookstore platform designed to facilitate seamless book browsing, searching, purchasing, and seller book management with a focus on user experience, security, and performance.",
+  "core_goals": [
+    "Provide a user-friendly interface for browsing and searching a wide catalog of books.",
+    "Offer secure user authentication and protected user-specific functionalities.",
+    "Enable a smooth and intuitive shopping cart and checkout process.",
+    "Support sellers in managing their book listings efficiently.",
+    "Deliver responsive design and optimized performance across devices.",
+    "Integrate external book data via Google Books API for enriched content.",
+    "Ensure data integrity and session persistence with JWT and local storage."
+  ],
+  "key_features": [
+    "User Registration and Login with JWT authentication and session persistence.",
+    "Protected routes restricting access to authenticated users for dashboard and book management.",
+    "Dynamic book catalog with searching, filtering by category, pagination, and detailed book views.",
+    "Shopping cart with add, remove, update quantity features, and order summary checkout.",
+    "User dashboard showing profile info, order history, and account statistics.",
+    "Seller capabilities to add, edit, and delete books with image upload and validation.",
+    "Newsletter subscription form powered by EmailJS integration.",
+    "Responsive navigation header with search, cart badge, and authentication status display.",
+    "Footer with site links, social media, and contact info.",
+    "Lazy loading components for better performance and code splitting.",
+    "Animated loading spinner for async operations and page transitions."
+  ],
+  "user_flow_summary": [
+    "Guests visit Home page showcasing featured books and call-to-action elements.",
+    "Users register an account via the Register page with email verification and secure password setup.",
+    "Authenticated users log in and access protected features like Dashboard and Cart.",
+    "Users browse Books catalog, search by title/author/category, filter, and paginate results.",
+    "Users view detailed information on individual books and can add them to their cart.",
+    "Users manage their cart by updating quantities or removing books, then proceed to checkout.",
+    "Sellers access My Books to manage their listings, edit or delete books, or add new book entries.",
+    "Users subscribe to newsletters through the subscription form utilizing EmailJS service.",
+    "Navigation header allows users to navigate seamlessly and see their cart status and login state."
+  ],
+  "validation_criteria": [
+    "All authentication workflows must securely handle JWT tokens and maintain session persistence.",
+    "Protected routes must only allow access by authenticated users, with redirection implemented otherwise.",
+    "Book catalog must support search, filter, pagination, and display correct results.",
+    "Shopping cart operations must update state reliably and reflect changes accurately in UI.",
+    "Book addition and editing forms require validation for inputs and image uploads.",
+    "Newsletter subscription must send emails successfully via EmailJS integration.",
+    "Responsive UI tested across different devices and screen sizes for consistency.",
+    "Loading spinner displayed during all async network requests and page transitions.",
+    "Error states handled gracefully without impacting user experience.",
+    "Google Books API integration returns and displays accurate external book data when invoked."
+  ],
+  "code_summary": {
+    "tech_stack": [
+      "TypeScript",
+      "JavaScript",
+      "React 18",
+      "React Router DOM v6",
+      "Vite",
+      "TailwindCSS",
+      "Styled Components",
+      "Axios",
+      "EmailJS",
+      "Lodash",
+      "Lucide React"
+    ],
+    "features": [
+      {
+        "name": "Authentication System",
+        "description": "User authentication with login, registration, and JWT token management. Includes protected routes and session persistence via localStorage.",
+        "files": [
+          "src/contexts/AuthContext.jsx",
+          "src/pages/Login.jsx",
+          "src/pages/Register.jsx"
+        ]
+      },
+      {
+        "name": "Book Management Context",
+        "description": "Centralized state management for books, cart operations, and book CRUD operations using React Context API.",
+        "files": [
+          "src/contexts/BookContext.jsx"
+        ]
+      },
+      {
+        "name": "Home Page",
+        "description": "Landing page with featured books, hero section, and main call-to-action elements.",
+        "files": [
+          "src/pages/Home.jsx"
+        ]
+      },
+      {
+        "name": "Books Catalog",
+        "description": "Browse and search books with filtering, pagination, and category selection.",
+        "files": [
+          "src/pages/Books.jsx"
+        ]
+      },
+      {
+        "name": "Book Detail Page",
+        "description": "Detailed view of individual books with add-to-cart functionality, ratings, and full descriptions.",
+        "files": [
+          "src/pages/BookDetail.jsx"
+        ]
+      },
+      {
+        "name": "Shopping Cart",
+        "description": "Shopping cart functionality with item management, quantity updates, order summary, and checkout process.",
+        "files": [
+          "src/pages/Cart.jsx"
+        ]
+      },
+      {
+        "name": "User Dashboard",
+        "description": "Protected user dashboard showing user statistics, order history, and account management.",
+        "files": [
+          "src/pages/Dashboard.jsx"
+        ]
+      },
+      {
+        "name": "My Books Management",
+        "description": "User's book collection management for sellers - view, edit, and delete their listed books.",
+        "files": [
+          "src/pages/MyBooks.jsx"
+        ]
+      },
+      {
+        "name": "Add/Edit Book",
+        "description": "Form for adding new books or editing existing books with image upload, category selection, and validation.",
+        "files": [
+          "src/pages/AddEditBook.jsx"
+        ]
+      },
+      {
+        "name": "Navigation Header",
+        "description": "Responsive header with navigation menu, search functionality, cart badge, and user authentication status.",
+        "files": [
+          "src/components/Header.jsx"
+        ]
+      },
+      {
+        "name": "Footer Component",
+        "description": "Footer with site links, social media, and contact information.",
+        "files": [
+          "src/components/Footer.jsx"
+        ]
+      },
+      {
+        "name": "Book Card Component",
+        "description": "Reusable card component for displaying book information in grid/list views.",
+        "files": [
+          "src/components/BookCard.jsx"
+        ]
+      },
+      {
+        "name": "Loading Spinner",
+        "description": "Animated loader component for async operations and page transitions.",
+        "files": [
+          "src/components/Loader.jsx"
+        ]
+      },
+      {
+        "name": "Newsletter Subscription",
+        "description": "Email newsletter subscription form integrated with EmailJS service.",
+        "files": [
+          "src/components/NewsletterSubscription.jsx",
+          "src/utils/emailConfig.js"
+        ]
+      },
+      {
+        "name": "Lazy Loading Components",
+        "description": "Lazy-loaded components for optimized performance and code splitting.",
+        "files": [
+          "src/components/LazyBookCard.tsx",
+          "src/components/LazyNewsletterSubscription.tsx"
+        ]
+      },
+      {
+        "name": "Protected Routes",
+        "description": "Route guards that ensure only authenticated users can access certain pages like dashboard and book management.",
+        "files": [
+          "src/App.tsx"
+        ]
+      },
+      {
+        "name": "Google Books Service Integration",
+        "description": "Integration with Google Books API for additional book data.",
+        "files": [
+          "src/contexts/googleBooksService.js"
+        ]
+      }
+    ]
+  }
+}

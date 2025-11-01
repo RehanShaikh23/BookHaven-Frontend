@@ -1,0 +1,651 @@
+[
+  {
+    "id": "TC001",
+    "title": "User Registration with Valid Data",
+    "description": "Verify that a user can successfully register with valid email, password, and required fields.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to the Register page"
+      },
+      {
+        "type": "action",
+        "description": "Input valid email, secure password and confirm password"
+      },
+      {
+        "type": "action",
+        "description": "Submit the registration form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify registration success message and email verification prompt"
+      },
+      {
+        "type": "assertion",
+        "description": "Check user is not automatically logged in before email verification"
+      }
+    ]
+  },
+  {
+    "id": "TC002",
+    "title": "User Registration with Invalid Email",
+    "description": "Verify registration rejection with invalid email formats.",
+    "category": "error handling",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to the Register page"
+      },
+      {
+        "type": "action",
+        "description": "Input invalid email formats (e.g. missing '@', missing domain)"
+      },
+      {
+        "type": "action",
+        "description": "Input valid password and confirm password"
+      },
+      {
+        "type": "action",
+        "description": "Submit the registration form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify validation error messages related to email format"
+      }
+    ]
+  },
+  {
+    "id": "TC003",
+    "title": "User Login Success with Valid Credentials",
+    "description": "Verify a registered user can log in successfully using correct credentials and receive valid JWT token with session persistence.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to Login page"
+      },
+      {
+        "type": "action",
+        "description": "Input registered email and correct password"
+      },
+      {
+        "type": "action",
+        "description": "Submit login form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify successful login and redirection to Dashboard"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify JWT token is stored in localStorage with appropriate expiry"
+      }
+    ]
+  },
+  {
+    "id": "TC004",
+    "title": "User Login Failure with Incorrect Credentials",
+    "description": "Verify login fails with invalid credentials and appropriate error message is displayed.",
+    "category": "error handling",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to Login page"
+      },
+      {
+        "type": "action",
+        "description": "Input registered email with wrong password"
+      },
+      {
+        "type": "action",
+        "description": "Submit login form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify login failure error message is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify no JWT token is stored in localStorage"
+      }
+    ]
+  },
+  {
+    "id": "TC005",
+    "title": "Protected Routes Access for Authenticated User",
+    "description": "Verify authenticated users can access protected routes like Dashboard and My Books pages.",
+    "category": "security",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Log in as a valid user"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /dashboard route"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify access to Dashboard page without redirection"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /mybooks route"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify access to My Books page without redirection"
+      }
+    ]
+  },
+  {
+    "id": "TC006",
+    "title": "Protected Routes Access for Unauthenticated User",
+    "description": "Verify unauthenticated users cannot access protected routes and are redirected to Login page.",
+    "category": "security",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Ensure user is logged out"
+      },
+      {
+        "type": "action",
+        "description": "Attempt to navigate directly to /dashboard"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify redirection to Login page"
+      },
+      {
+        "type": "action",
+        "description": "Attempt to navigate directly to /mybooks"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify redirection to Login page"
+      }
+    ]
+  },
+  {
+    "id": "TC007",
+    "title": "Book Catalog Search by Title",
+    "description": "Verify the book catalog search filters results correctly by book title.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to Books catalog page"
+      },
+      {
+        "type": "action",
+        "description": "Input partial or full valid book title in search bar"
+      },
+      {
+        "type": "action",
+        "description": "Perform search"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify search results contain only books matching the title query"
+      }
+    ]
+  },
+  {
+    "id": "TC008",
+    "title": "Book Catalog Filter by Category",
+    "description": "Verify filtering by book category returns correct subset of books.",
+    "category": "functional",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to Books catalog page"
+      },
+      {
+        "type": "action",
+        "description": "Select a category filter from available options"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify only books belonging to selected category are displayed"
+      }
+    ]
+  },
+  {
+    "id": "TC009",
+    "title": "Book Catalog Pagination Navigation",
+    "description": "Verify pagination controls navigate correctly through book result pages.",
+    "category": "functional",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to Books catalog page with many books"
+      },
+      {
+        "type": "action",
+        "description": "Click on next page pagination button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify new page of books is displayed"
+      },
+      {
+        "type": "action",
+        "description": "Click on previous page pagination button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify previous page of books is displayed"
+      }
+    ]
+  },
+  {
+    "id": "TC010",
+    "title": "View Detailed Book Information",
+    "description": "Verify users can view complete details of a selected book including image, description, ratings, and add to cart option.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to Books catalog"
+      },
+      {
+        "type": "action",
+        "description": "Select a book from the list to view details"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify detailed page shows book image, full description, author, category, ratings"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify 'Add to Cart' button is present and enabled"
+      }
+    ]
+  },
+  {
+    "id": "TC011",
+    "title": "Add a Book to Shopping Cart",
+    "description": "Verify that users can add a book to the shopping cart from the detail page.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to a book's detailed page"
+      },
+      {
+        "type": "action",
+        "description": "Click on 'Add to Cart' button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify book is added to cart and cart badge count increments"
+      }
+    ]
+  },
+  {
+    "id": "TC012",
+    "title": "Update Cart Item Quantity",
+    "description": "Verify users can update quantity of books in the shopping cart and totals update accordingly.",
+    "category": "functional",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to the Cart page with at least one book in the cart"
+      },
+      {
+        "type": "action",
+        "description": "Change the quantity of a book to a valid number"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the cart item quantity changes and order totals reflect the update"
+      }
+    ]
+  },
+  {
+    "id": "TC013",
+    "title": "Remove Book from Shopping Cart",
+    "description": "Verify that users can remove a book from their shopping cart and the cart updates correctly.",
+    "category": "functional",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to Cart page with at least one book added"
+      },
+      {
+        "type": "action",
+        "description": "Click the remove/delete button for a book"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the book is removed from the cart and totals update accordingly"
+      }
+    ]
+  },
+  {
+    "id": "TC014",
+    "title": "Checkout Order Summary Accuracy",
+    "description": "Verify the order summary displays correct pricing and items before finalizing purchase.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to Cart page with multiple books"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify order summary displays correct book titles, quantities, prices and total amount"
+      }
+    ]
+  },
+  {
+    "id": "TC015",
+    "title": "Add New Book as Seller with Valid Data",
+    "description": "Verify sellers can add new book listings with valid inputs including image upload and category selection.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Log in as seller"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to Add/Edit Book page"
+      },
+      {
+        "type": "action",
+        "description": "Fill in book details with valid inputs, select category and upload valid image"
+      },
+      {
+        "type": "action",
+        "description": "Submit form to add book"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify new book appears in seller's My Books list"
+      }
+    ]
+  },
+  {
+    "id": "TC016",
+    "title": "Edit Existing Book as Seller with Validation",
+    "description": "Verify sellers can edit their book listing and validation prevents invalid inputs.",
+    "category": "error handling",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Log in as seller"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to My Books page and choose a book to edit"
+      },
+      {
+        "type": "action",
+        "description": "Modify details with invalid input (e.g. blank required fields, invalid image format)"
+      },
+      {
+        "type": "action",
+        "description": "Attempt to save changes"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify appropriate validation error messages are shown and changes are not saved"
+      }
+    ]
+  },
+  {
+    "id": "TC017",
+    "title": "Delete Book Listing as Seller",
+    "description": "Verify sellers can delete their book listings and confirmation prompts are displayed.",
+    "category": "functional",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Log in as seller"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to My Books page"
+      },
+      {
+        "type": "action",
+        "description": "Initiate delete action for a specific book"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a confirmation prompt appears"
+      },
+      {
+        "type": "action",
+        "description": "Confirm deletion"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify book no longer appears in the seller's listing"
+      }
+    ]
+  },
+  {
+    "id": "TC018",
+    "title": "Newsletter Subscription Success",
+    "description": "Verify newsletter subscription form submits successfully and EmailJS integration sends emails.",
+    "category": "functional",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to Newsletter Subscription form"
+      },
+      {
+        "type": "action",
+        "description": "Input valid email address"
+      },
+      {
+        "type": "action",
+        "description": "Submit the subscription form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify success notification is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify EmailJS service call is successfully made"
+      }
+    ]
+  },
+  {
+    "id": "TC019",
+    "title": "Newsletter Subscription Failure with Invalid Email",
+    "description": "Verify newsletter subscription form validation prevents invalid email submission.",
+    "category": "error handling",
+    "priority": "Low",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to Newsletter Subscription form"
+      },
+      {
+        "type": "action",
+        "description": "Input invalid email formats"
+      },
+      {
+        "type": "action",
+        "description": "Attempt to submit the form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify validation error messages are displayed and submission is blocked"
+      }
+    ]
+  },
+  {
+    "id": "TC020",
+    "title": "Navigation Header Responsive Behavior",
+    "description": "Verify navigation header renders correctly and remains functional across different screen sizes and devices.",
+    "category": "ui",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Load the site on desktop screen size"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify navigation menu, cart badge, search bar, and auth status display correctly"
+      },
+      {
+        "type": "action",
+        "description": "Resize viewport to tablet size"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify navigation adapts (e.g. hamburger menu) and remains functional"
+      },
+      {
+        "type": "action",
+        "description": "Resize viewport to mobile size"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify mobile friendly navigation UI and all controls work as expected"
+      }
+    ]
+  },
+  {
+    "id": "TC021",
+    "title": "Footer Content and Links Verification",
+    "description": "Verify footer component correctly displays all site links, social media icons, and contact info.",
+    "category": "ui",
+    "priority": "Low",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to any page with the footer component"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify footer content is visible and correctly formatted"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify all site links and social media icons are present and clickable"
+      }
+    ]
+  },
+  {
+    "id": "TC022",
+    "title": "Loading Spinner Visibility During Async Operations",
+    "description": "Verify that the animated loading spinner displays during all async network requests and page transitions.",
+    "category": "functional",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Trigger actions that cause network requests (e.g. login, book search, add to cart)"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify loading spinner component is visible while waiting for responses"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify spinner is hidden once the async operation completes"
+      }
+    ]
+  },
+  {
+    "id": "TC023",
+    "title": "Google Books API Integration and Data Display",
+    "description": "Verify external book data from Google Books API is fetched and displayed correctly when requested.",
+    "category": "functional",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Trigger search or book enrichment that invokes Google Books API"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify data returned matches search query and is rendered properly in the UI"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify error handling on Google Books API failures"
+      }
+    ]
+  },
+  {
+    "id": "TC024",
+    "title": "Session Persistence with JWT and Local Storage",
+    "description": "Verify that user session persists across browser refreshes using JWT stored in localStorage.",
+    "category": "security",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Log in with valid credentials"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify JWT token stored in localStorage"
+      },
+      {
+        "type": "action",
+        "description": "Refresh the browser window"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify user remains logged in and protected routes remain accessible"
+      },
+      {
+        "type": "action",
+        "description": "Clear localStorage and refresh"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify user is logged out and redirected to Login for protected routes"
+      }
+    ]
+  },
+  {
+    "id": "TC025",
+    "title": "Error Handling for Network Failures",
+    "description": "Verify that network errors during operations like login, book fetch, checkout display user-friendly error messages without breaking UI.",
+    "category": "error handling",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Simulate network failure for key API calls (e.g. login, book data fetch, add to cart)"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify appropriate error message is shown to user"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify UI remains functional and user can retry the operation"
+      }
+    ]
+  }
+]

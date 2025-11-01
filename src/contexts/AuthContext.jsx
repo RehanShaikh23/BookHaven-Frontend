@@ -15,14 +15,19 @@ const isValidToken = (token) => {
     return false;
   }
   
-  try {
-    const payload = JSON.parse(atob(token.split('.')[1]));
-    const currentTime = Math.floor(Date.now() / 1000);
-    return payload.exp > currentTime;
-  } catch (error) {
-    console.warn('Invalid token format:', error);
-    return false;
+ if ((token.match(/\./g) || []).length === 2) {
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      const currentTime = Math.floor(Date.now() / 1000);
+      return payload.exp > currentTime;
+    } catch (error) {
+      console.warn('Invalid JWT token format:', error);
+      return false;
+    }
   }
+
+  // Opaque/non-JWT token — can't validate client-side; assume present and let server check.
+  return true;
 };
 
 const clearStoredAuth = () => {
@@ -35,10 +40,20 @@ const setStoredAuth = (user, token) => {
   localStorage.setItem(TOKEN_KEY, token);
 };
 
-const getStoredAuth = () => ({
-  token: localStorage.getItem(TOKEN_KEY),
-  user: localStorage.getItem(USER_KEY),
-});
+const getStoredAuth = () => {
+  const token = localStorage.getItem(TOKEN_KEY);
+  const userRaw = localStorage.getItem(USER_KEY);
+  let user = null;
+  if (userRaw) {
+    try {
+      user = JSON.parse(userRaw);
+    } catch (e) {
+      console.warn('Failed to parse stored user, clearing:', e);
+      localStorage.removeItem(USER_KEY);
+    }
+  }
+  return { token, user };
+};
 
 // Auth reducer
 const authReducer = (state, action) => {
@@ -106,11 +121,24 @@ const setupAxiosInterceptors = (dispatch) => {
   axios.interceptors.response.use(
     (response) => response,
     (error) => {
-      if (error.response?.status === 401 || error.response?.status === 403) {
+      // Only force logout on authentication failures, not on all 401s
+      const status = error.response?.status;
+      const message = error.response?.data?.message || '';
+      const isAuthEndpoint = error.config?.url?.includes('/auth/');
+      
+      // Force logout only if:
+      // 1. Auth endpoint returns 401 (login/register/me failed)
+      // 2. Token is explicitly invalid or expired
+      const shouldLogout = 
+        (status === 401 && isAuthEndpoint) ||
+        (status === 401 && (message.toLowerCase().includes('token') && (message.toLowerCase().includes('invalid') || message.toLowerCase().includes('expired'))));
+      
+      if (shouldLogout) {
         clearStoredAuth();
         dispatch({ type: 'LOGOUT' });
         window.dispatchEvent(new CustomEvent('auth-logout'));
       }
+      
       return Promise.reject(error);
     }
   );
@@ -139,7 +167,7 @@ export const AuthProvider = ({ children }) => {
     const initializeAuth = async () => {
       const { token: storedToken, user: storedUser } = getStoredAuth();
 
-      if (!storedToken || !storedUser || !isValidToken(storedToken)) {
+      if (!storedToken || !storedUser) {
         clearStoredAuth();
         if (isMounted) dispatch({ type: 'LOGOUT' });
         return;
@@ -159,6 +187,8 @@ export const AuthProvider = ({ children }) => {
         console.warn('Token validation failed:', error);
         clearStoredAuth();
         if (isMounted) dispatch({ type: 'LOGOUT' });
+      } finally {
+        if (isMounted) dispatch({ type: 'SET_LOADING', payload: false });
       }
     };
 
